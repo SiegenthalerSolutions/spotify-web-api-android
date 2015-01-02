@@ -18,7 +18,6 @@ package me.siegenthaler.spotify.web.api.request;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Locale;
 
 import me.siegenthaler.spotify.web.api.model.Artist;
@@ -38,8 +37,7 @@ public final class ArtistRequest extends AbstractRequest<ArtistRequest, Artist> 
      * {@inheritDoc}
      */
     @Override
-    public Artist getResponse() throws IOException, JSONException {
-        final String data = request(METHOD_GET);
+    public Artist getResponse(String data) throws JSONException {
         final JSONObject object = new JSONObject(data);
         return new Artist(object);
     }

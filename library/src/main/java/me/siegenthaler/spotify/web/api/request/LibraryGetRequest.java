@@ -18,7 +18,6 @@ package me.siegenthaler.spotify.web.api.request;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.List;
 
 import me.siegenthaler.spotify.web.api.model.Page;
@@ -39,10 +38,8 @@ public final class LibraryGetRequest extends AbstractPageRequest<LibraryGetReque
      * {@inheritDoc}
      */
     @Override
-    public Page<Track> getResponse() throws IOException, JSONException {
-        final String data = request(METHOD_GET);
+    public Page<Track> getResponse(String data) throws JSONException {
         final JSONObject object = new JSONObject(data);
-
         final List<Track> list = Track.getAll(object.getJSONArray("items"));
         return new Page<>(list, object);
     }

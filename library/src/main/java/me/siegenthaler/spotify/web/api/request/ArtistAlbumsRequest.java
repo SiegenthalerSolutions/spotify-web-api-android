@@ -20,7 +20,6 @@ import android.text.TextUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -56,8 +55,7 @@ public final class ArtistAlbumsRequest extends AbstractPageRequest<ArtistAlbumsR
      * {@inheritDoc}
      */
     @Override
-    public Page<SimpleAlbum> getResponse() throws IOException, JSONException {
-        final String data = request(METHOD_GET);
+    public Page<SimpleAlbum> getResponse(String data) throws JSONException {
         final JSONObject object = new JSONObject(data);
         final JSONObject root = object.getJSONObject("albums");
 

@@ -18,7 +18,6 @@ package me.siegenthaler.spotify.web.api.request;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Locale;
 
 import me.siegenthaler.spotify.web.api.model.Track;
@@ -38,8 +37,7 @@ public final class TrackRequest extends AbstractRequest<TrackRequest, Track> {
      * {@inheritDoc}
      */
     @Override
-    public Track getResponse() throws IOException, JSONException {
-        final String data = request(METHOD_GET);
+    public Track getResponse(String data) throws JSONException {
         final JSONObject object = new JSONObject(data);
         return new Track(object);
     }

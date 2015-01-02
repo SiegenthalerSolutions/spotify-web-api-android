@@ -15,81 +15,71 @@
  */
 package me.siegenthaler.spotify.web.api.request;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.error.ParseError;
+import com.android.volley.request.JsonRequest;
+import com.android.volley.toolbox.HttpHeaderParser;
+
+import org.apache.http.client.utils.URIUtils;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-
-import me.siegenthaler.spotify.web.api.RestClient;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * (non-doc)
  */
 @SuppressWarnings("unchecked")
 public abstract class AbstractRequest<J extends AbstractRequest, T> {
-    public final static String METHOD_GET = "GET";
-    public final static String METHOD_POST = "POST";
-    public final static String METHOD_PUT = "PUT";
-    public final static String METHOD_DELETE = "DELETE";
-
-    public RestClient mClient;
-    public String mHost;
-    public String mScheme;
-    public String mPath;
-    public int mPort;
-    public List<NameValuePair> mParameters = new ArrayList<>();
-    public List<NameValuePair> mHeaders = new ArrayList<>();
-    public List<NameValuePair> mBodyParameters = new ArrayList<>();
-    public JSONObject mJSONBody;
+    protected String mHost;
+    protected String mScheme;
+    protected String mPath;
+    protected int mPort;
+    protected int mMethod = Request.Method.GET;
+    protected final Map<String, String> mParameters = new HashMap<>();
+    protected final Map<String, String> mHeaders = new HashMap<>();
+    protected String mRawBody;
+    protected Response.Listener mListener;
+    protected Response.ErrorListener mErrorListener;
 
     /**
      * (non-doc)
      */
-    public abstract T getResponse() throws IOException, JSONException;
+    public abstract T getResponse(String data) throws JSONException;
 
     /**
      * (non-doc)
      */
-    final public Future<T> getResponseAsync(final Callback<T> callback) {
-        final Callable<T> callable = new Callable<T>() {
+    final public Request<T> build() {
+        return new BuiltJsonRequest<>(this, new ConstructCallback<T>() {
             @Override
-            public T call() throws Exception {
-                final T item;
-                try {
-                    item = getResponse();
-                    if (callback != null) {
-                        callback.onSuccessful(item);
-                    }
-                } catch (Exception exception) {
-                    if (callback != null) {
-                        callback.onFailure(exception);
-                    }
-                }
-                return getResponse();
+            public T construct(String data) throws JSONException {
+                return getResponse(data);
             }
-        };
-        return mClient.requestAsync(callable);
+        });
     }
 
     /**
      * (non-doc)
      */
-    final public String request(String method) throws IOException {
-        return mClient.request(this, method);
-    }
-
-    /**
-     * (non-doc)
-     */
-    final public J setClient(RestClient client) {
-        mClient = client;
-        return (J) this;
+    final public String getQueryPath() {
+        try {
+            final URI link = URIUtils.createURI(
+                    mScheme,
+                    mHost,
+                    mPort,
+                    mPath,
+                    null,
+                    null);
+            return link.toASCIIString();
+        } catch (URISyntaxException exception) {
+            throw new IllegalStateException(exception);
+        }
     }
 
     /**
@@ -97,6 +87,14 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
      */
     final public J setHost(String host) {
         mHost = host;
+        return (J) this;
+    }
+
+    /**
+     * (non-doc)
+     */
+    final public J setMethod(int method) {
+        mMethod = method;
         return (J) this;
     }
 
@@ -127,8 +125,24 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
     /**
      * (non-doc)
      */
-    final public J setParameters(List<NameValuePair> parameters) {
-        mParameters = parameters;
+    final public J setListener(Response.Listener listener) {
+        mListener = listener;
+        return (J) this;
+    }
+
+    /**
+     * (non-doc)
+     */
+    final public J setErrorListener(Response.ErrorListener listener) {
+        mErrorListener = listener;
+        return (J) this;
+    }
+
+    /**
+     * (non-doc)
+     */
+    final public J setBody(String body) {
+        mRawBody = body;
         return (J) this;
     }
 
@@ -136,15 +150,7 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
      * (non-doc)
      */
     final public J addParameter(String name, String value) {
-        mParameters.add(new BasicNameValuePair(name, value));
-        return (J) this;
-    }
-
-    /**
-     * (non-doc)
-     */
-    final public J setHeaders(List<NameValuePair> headerParameters) {
-        mHeaders = headerParameters;
+        mParameters.put(name, value);
         return (J) this;
     }
 
@@ -152,46 +158,71 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
      * (non-doc)
      */
     final public J addHeader(String name, String value) {
-        mHeaders.add(new BasicNameValuePair(name, value));
+        mHeaders.put(name, value);
         return (J) this;
     }
 
     /**
      * (non-doc)
      */
-    final public J setBodyAsParameters(List<NameValuePair> bodyParameters) {
-        mBodyParameters = bodyParameters;
-        return (J) this;
-    }
-
-    /**
-     * (non-doc)
-     */
-    final public J addBody(String name, String value) {
-        mBodyParameters.add(new BasicNameValuePair(name, value));
-        return (J) this;
-    }
-
-    /**
-     * (non-doc)
-     */
-    final public J setBodyAsJson(JSONObject jsonBody) {
-        mJSONBody = jsonBody;
-        return (J) this;
-    }
-
-    /**
-     * (non-doc)
-     */
-    public static interface Callback<J> {
+    public static interface ConstructCallback<T> {
         /**
          * (non-doc)
          */
-        public void onFailure(Throwable throwable);
+        public T construct(String data) throws JSONException;
+    }
+
+    /**
+     * (non-doc)
+     */
+    public static final class BuiltJsonRequest<T> extends JsonRequest<T> {
+        private final Map<String, String> mParameters;
+        private final Map<String, String> mHeaders;
+        private final ConstructCallback<T> mCallback;
 
         /**
          * (non-doc)
          */
-        public void onSuccessful(J item);
+        public BuiltJsonRequest(AbstractRequest builder, ConstructCallback<T> callback) {
+            super(builder.mMethod, builder.getQueryPath(), (builder.mRawBody == null) ? null : builder.mRawBody,
+                    builder.mListener, builder.mErrorListener);
+            this.mParameters = builder.mParameters;
+            this.mHeaders = builder.mHeaders;
+            this.mCallback = callback;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected Map<String, String> getParams() {
+            return mParameters;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Map<String, String> getHeaders() {
+            return mHeaders;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected Response<T> parseNetworkResponse(NetworkResponse response) {
+            try {
+                final String jsonString =
+                        new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+
+                return Response.success(mCallback.construct(jsonString),
+                        HttpHeaderParser.parseCacheHeaders(response));
+            } catch (UnsupportedEncodingException e) {
+                return Response.error(new ParseError(e));
+            } catch (JSONException je) {
+                return Response.error(new ParseError(je));
+            }
+        }
     }
 }

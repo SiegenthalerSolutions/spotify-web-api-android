@@ -17,9 +17,9 @@ package me.siegenthaler.spotify.web.api.request;
 
 import android.text.TextUtils;
 
-import org.json.JSONException;
+import com.android.volley.Request;
 
-import java.io.IOException;
+import org.json.JSONException;
 
 /**
  * (non-doc)
@@ -32,6 +32,7 @@ public final class FollowRemoveRequest extends AbstractRequest<FollowRemoveReque
      * (non-doc)
      */
     public FollowRemoveRequest setIds(String... ids) {
+        setMethod(Request.Method.DELETE);
         setPath("/v1/me/following");
         return addParameter("ids", TextUtils.join(",", ids));
     }
@@ -47,8 +48,7 @@ public final class FollowRemoveRequest extends AbstractRequest<FollowRemoveReque
      * {@inheritDoc}
      */
     @Override
-    public Void getResponse() throws IOException, JSONException {
-        request(METHOD_DELETE);
+    public Void getResponse(String data) throws JSONException {
         return null;
     }
 }

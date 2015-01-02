@@ -18,8 +18,6 @@ package me.siegenthaler.spotify.web.api.request;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
 import me.siegenthaler.spotify.web.api.model.User;
 
 /**
@@ -37,8 +35,7 @@ public final class UserRequest extends AbstractRequest<UserRequest, User> {
      * {@inheritDoc}
      */
     @Override
-    public User getResponse() throws IOException, JSONException {
-        final String data = request(METHOD_GET);
+    public User getResponse(String data) throws JSONException {
         final JSONObject object = new JSONObject(data);
         return new User(object);
     }

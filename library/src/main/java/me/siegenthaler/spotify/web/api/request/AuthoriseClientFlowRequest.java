@@ -18,10 +18,10 @@ package me.siegenthaler.spotify.web.api.request;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import com.android.volley.Request;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 import me.siegenthaler.spotify.web.api.model.Token;
 
@@ -33,6 +33,7 @@ public final class AuthoriseClientFlowRequest extends AbstractRequest<AuthoriseC
      * (non-doc)
      */
     public AuthoriseClientFlowRequest setAuthorisation(String id, String secret) {
+        setMethod(Request.Method.POST);
         setPath("/api/token");
         return addHeader(
                 "Authorization",
@@ -43,14 +44,14 @@ public final class AuthoriseClientFlowRequest extends AbstractRequest<AuthoriseC
      * (non-doc)
      */
     public AuthoriseClientFlowRequest setType(String type) {
-        return addBody("grant_type", type);
+        return addParameter("grant_type", type);
     }
 
     /**
      * (non-doc)
      */
     public AuthoriseClientFlowRequest setScopes(String... scopes) {
-        return addBody("scope", TextUtils.join(" ", scopes));
+        return addParameter("scope", TextUtils.join(" ", scopes));
     }
 
     /**
@@ -64,8 +65,7 @@ public final class AuthoriseClientFlowRequest extends AbstractRequest<AuthoriseC
      * {@inheritDoc}
      */
     @Override
-    public Token getResponse() throws IOException, JSONException {
-        final String data = request(METHOD_POST);
+    public Token getResponse(String data) throws JSONException {
         final JSONObject object = new JSONObject(data);
         return new Token(object);
     }

@@ -20,7 +20,6 @@ import android.text.TextUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +39,7 @@ public final class LibraryCheckRequest extends AbstractRequest<LibraryCheckReque
      * {@inheritDoc}
      */
     @Override
-    public List<Boolean> getResponse() throws IOException, JSONException {
-        final String data = request(METHOD_GET);
+    public List<Boolean> getResponse(String data) throws JSONException {
         final JSONArray object = new JSONArray(data);
 
         final List<Boolean> result = new ArrayList<>(object.length());

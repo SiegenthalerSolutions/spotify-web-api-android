@@ -34,5 +34,5 @@ android {
 /// Dependencies
 ///
 dependencies {
-    provided 'com.squareup.okhttp:okhttp:2.1.0'                                  // Service-Http
+    compile 'dev.dworks.libs:volleyplus:+'
 }

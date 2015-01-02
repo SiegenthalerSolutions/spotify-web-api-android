@@ -20,7 +20,6 @@ import android.text.TextUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.List;
 
 import me.siegenthaler.spotify.web.api.model.Track;
@@ -41,8 +40,7 @@ public final class TrackListRequest extends AbstractRequest<TrackListRequest, Li
      * {@inheritDoc}
      */
     @Override
-    public List<Track> getResponse() throws IOException, JSONException {
-        final String data = request(METHOD_GET);
+    public List<Track> getResponse(String data) throws JSONException {
         final JSONObject object = new JSONObject(data);
         return Track.getAll(object.getJSONArray("tracks"));
     }

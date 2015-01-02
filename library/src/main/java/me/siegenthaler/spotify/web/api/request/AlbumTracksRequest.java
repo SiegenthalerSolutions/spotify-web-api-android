@@ -18,7 +18,6 @@ package me.siegenthaler.spotify.web.api.request;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -40,8 +39,7 @@ public final class AlbumTracksRequest extends AbstractPageRequest<AlbumTracksReq
      * {@inheritDoc}
      */
     @Override
-    public Page<SimpleTrack> getResponse() throws IOException, JSONException {
-        final String data = request(METHOD_GET);
+    public Page<SimpleTrack> getResponse(String data) throws JSONException {
         final JSONObject object = new JSONObject(data);
         final JSONObject root = object.getJSONObject("tracks");
 

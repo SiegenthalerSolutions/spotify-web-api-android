@@ -20,7 +20,6 @@ import android.text.TextUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,10 +49,8 @@ public final class FollowCheckRequest  extends AbstractRequest<FollowCheckReques
      * {@inheritDoc}
      */
     @Override
-    public List<Boolean> getResponse() throws IOException, JSONException {
-        final String data = request(METHOD_GET);
+    public List<Boolean> getResponse(String data) throws JSONException {
         final JSONArray object = new JSONArray(data);
-
         final List<Boolean> result = new ArrayList<>(object.length());
         for (int i = 0, j = result.size(); i < j; i++) {
             result.add(object.getBoolean(i));

@@ -20,8 +20,6 @@ import android.text.TextUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
 import me.siegenthaler.spotify.web.api.model.Token;
 
 /**
@@ -48,29 +46,28 @@ public final class AuthoriseFlowRequest extends AbstractRequest<AuthoriseFlowReq
      * (non-doc)
      */
     public AuthoriseFlowRequest setState(String state) {
-        return addBody("state", state);
+        return addParameter("state", state);
     }
 
     /**
      * (non-doc)
      */
     public AuthoriseFlowRequest setScopes(String... scopes) {
-        return addBody("scope", TextUtils.join(" ", scopes));
+        return addParameter("scope", TextUtils.join(" ", scopes));
     }
 
     /**
      * (non-doc)
      */
     public AuthoriseFlowRequest setForceDialog(boolean isForced) {
-        return addBody("show_dialog", isForced ? "true" : "false");
+        return addParameter("show_dialog", isForced ? "true" : "false");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Token getResponse() throws IOException, JSONException {
-        final String data = request(METHOD_GET);
+    public Token getResponse(String data) throws JSONException {
         final JSONObject object = new JSONObject(data);
         return new Token(object);
     }

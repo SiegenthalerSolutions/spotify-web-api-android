@@ -18,7 +18,6 @@ package me.siegenthaler.spotify.web.api.request;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.List;
 
 import me.siegenthaler.spotify.web.api.model.Page;
@@ -46,8 +45,7 @@ public final class BrowseNewReleasesRequest extends AbstractPageRequest<BrowseNe
      * {@inheritDoc}
      */
     @Override
-    public Page<SimpleAlbum> getResponse() throws IOException, JSONException {
-        final String data = request(METHOD_GET);
+    public Page<SimpleAlbum> getResponse(String data) throws JSONException {
         final JSONObject object = new JSONObject(data);
         final JSONObject root = object.getJSONObject("albums");
 

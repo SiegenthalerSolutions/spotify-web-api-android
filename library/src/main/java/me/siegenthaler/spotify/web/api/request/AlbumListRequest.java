@@ -20,7 +20,6 @@ import android.text.TextUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.List;
 
 import me.siegenthaler.spotify.web.api.model.Album;
@@ -41,8 +40,7 @@ public final class AlbumListRequest extends AbstractRequest<AlbumListRequest, Li
      * {@inheritDoc}
      */
     @Override
-    public List<Album> getResponse() throws IOException, JSONException {
-        final String data = request(METHOD_GET);
+    public List<Album> getResponse(String data) throws JSONException {
         final JSONObject object = new JSONObject(data);
         return Album.getAll(object.getJSONArray("albums"));
     }
