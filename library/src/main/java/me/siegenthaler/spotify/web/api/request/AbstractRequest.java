@@ -43,7 +43,6 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
     public List<NameValuePair> mHeaders = new ArrayList<>();
     public List<NameValuePair> mBodyParameters = new ArrayList<>();
     public JSONObject mJSONBody;
-    public String mMethod;
 
     /**
      * (non-doc)
