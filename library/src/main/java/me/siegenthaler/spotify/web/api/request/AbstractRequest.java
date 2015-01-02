@@ -69,8 +69,10 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
     /**
      * (non-doc)
      */
-    final public void send() {
-        mRequestQueue.add(build());
+    final public Request<T> send() {
+        final Request<T> request = build();
+        mRequestQueue.add(request);
+        return request;
     }
 
     /**

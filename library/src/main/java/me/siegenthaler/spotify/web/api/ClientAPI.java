@@ -31,6 +31,10 @@ import me.siegenthaler.spotify.web.api.request.ArtistRequest;
 import me.siegenthaler.spotify.web.api.request.ArtistTopTrackRequest;
 import me.siegenthaler.spotify.web.api.request.BrowseFeaturedPlaylistRequest;
 import me.siegenthaler.spotify.web.api.request.BrowseNewReleasesRequest;
+import me.siegenthaler.spotify.web.api.request.LibraryAddRequest;
+import me.siegenthaler.spotify.web.api.request.LibraryCheckRequest;
+import me.siegenthaler.spotify.web.api.request.LibraryGetRequest;
+import me.siegenthaler.spotify.web.api.request.LibraryRemoveRequest;
 import me.siegenthaler.spotify.web.api.request.PlaylistRequest;
 import me.siegenthaler.spotify.web.api.request.PlaylistTrackRequest;
 import me.siegenthaler.spotify.web.api.request.PlaylistUserRequest;
@@ -128,6 +132,34 @@ public class ClientAPI {
      */
     public BrowseNewReleasesRequest browseAlbumReleases() {
         return addDefaultHeader(new BrowseNewReleasesRequest());
+    }
+
+    /**
+     * (non-doc)
+     */
+    public LibraryCheckRequest containsMySavedTracks(String... ids) {
+        return addDefaultHeader(new LibraryCheckRequest()).setIds(ids);
+    }
+
+    /**
+     * (non-doc)
+     */
+    public LibraryAddRequest addToMySavedTracks(String... ids) {
+        return addDefaultHeader(new LibraryAddRequest()).setTracks(ids);
+    }
+
+    /**
+     * (non-doc)
+     */
+    public LibraryRemoveRequest removeFromMySavedTracks(String... ids) {
+        return addDefaultHeader(new LibraryRemoveRequest()).setTracks(ids);
+    }
+
+    /**
+     * (non-doc)
+     */
+    public LibraryGetRequest getMySavedTracks() {
+        return addDefaultHeader(new LibraryGetRequest());
     }
 
     /**
