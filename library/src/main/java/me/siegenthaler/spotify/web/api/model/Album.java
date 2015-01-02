@@ -16,6 +16,7 @@
 package me.siegenthaler.spotify.web.api.model;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,10 +55,22 @@ public class Album extends SimpleAlbum {
     /**
      * (non-doc)
      */
+    static private List<NameValuePair> getCopyrightsList(JSONArray array) throws JSONException {
+        final List<NameValuePair> list = new ArrayList<>(array.length());
+        for (int i = 0, j = list.size(); i < j; i++) {
+            final JSONObject object = array.getJSONObject(i);
+            list.add(new BasicNameValuePair(object.getString("text"), object.getString("type")));
+        }
+        return list;
+    }
+
+    /**
+     * (non-doc)
+     */
     public Album(JSONObject data) throws JSONException {
         super(data);
         this.mArtists = SimpleArtist.getAllSimple(data.getJSONArray("artists"));
-        this.mCopyrights = JsonParserUtil.getCopyrightsList(data.getJSONArray("copyrights"));
+        this.mCopyrights = getCopyrightsList(data.getJSONArray("copyrights"));
         this.mExternalIds = JsonParserUtil.getStringMap(data.getJSONObject("external_ids"));
         this.mGenres = JsonParserUtil.getStringList(data.getJSONArray("genres"));
         this.mPopularity = data.getInt("popularity");

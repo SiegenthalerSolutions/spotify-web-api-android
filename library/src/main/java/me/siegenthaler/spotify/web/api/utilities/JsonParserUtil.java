@@ -15,8 +15,6 @@
  */
 package me.siegenthaler.spotify.web.api.utilities;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,18 +29,6 @@ import java.util.Map;
  * (non-doc)
  */
 public final class JsonParserUtil {
-    /**
-     * (non-doc)
-     */
-    static public List<NameValuePair> getCopyrightsList(JSONArray array) throws JSONException {
-        final List<NameValuePair> list = new ArrayList<>(array.length());
-        for (int i = 0, j = list.size(); i < j; i++) {
-            final JSONObject object = array.getJSONObject(i);
-            list.add(new BasicNameValuePair(object.getString("text"), object.getString("type")));
-        }
-        return list;
-    }
-
     /**
      * (non-doc)
      */
