@@ -23,6 +23,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 import me.siegenthaler.spotify.web.api.RestClient;
 
@@ -38,7 +40,9 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
 
     public RestClient mClient;
     public String mHost;
+    public String mScheme;
     public String mPath;
+    public int mPort;
     public List<NameValuePair> mParameters = new ArrayList<>();
     public List<NameValuePair> mHeaders = new ArrayList<>();
     public List<NameValuePair> mBodyParameters = new ArrayList<>();
@@ -48,6 +52,30 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
      * (non-doc)
      */
     public abstract T getResponse() throws IOException, JSONException;
+
+    /**
+     * (non-doc)
+     */
+    final public Future<T> getResponseAsync(final Callback<T> callback) {
+        final Callable<T> callable = new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                final T item;
+                try {
+                    item = getResponse();
+                    if (callback != null) {
+                        callback.onSuccessful(item);
+                    }
+                } catch (Exception exception) {
+                    if (callback != null) {
+                        callback.onFailure(exception);
+                    }
+                }
+                return getResponse();
+            }
+        };
+        return mClient.requestAsync(callable);
+    }
 
     /**
      * (non-doc)
@@ -69,6 +97,22 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
      */
     final public J setHost(String host) {
         mHost = host;
+        return (J) this;
+    }
+
+    /**
+     * (non-doc)
+     */
+    final public J setScheme(String scheme) {
+        mScheme = scheme;
+        return (J) this;
+    }
+
+    /**
+     * (non-doc)
+     */
+    final public J setPort(int port) {
+        mPort = port;
         return (J) this;
     }
 
@@ -134,5 +178,20 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
     final public J setBodyAsJson(JSONObject jsonBody) {
         mJSONBody = jsonBody;
         return (J) this;
+    }
+
+    /**
+     * (non-doc)
+     */
+    public static interface Callback<J> {
+        /**
+         * (non-doc)
+         */
+        public void onFailure(Throwable throwable);
+
+        /**
+         * (non-doc)
+         */
+        public void onSuccessful(J item);
     }
 }

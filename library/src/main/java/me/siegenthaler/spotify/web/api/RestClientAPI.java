@@ -15,24 +15,8 @@
  */
 package me.siegenthaler.spotify.web.api;
 
-import java.io.IOException;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-
-import me.siegenthaler.spotify.web.api.request.AbstractRequest;
-
 /**
  * (non-doc)
  */
-public interface RestClient {
-
-    /**
-     * (non-doc)
-     */
-    public <T> Future<T> requestAsync(Callable<T> callable);
-
-    /**
-     * (non-doc)
-     */
-    public String request(AbstractRequest request, String method) throws IOException;
+public class RestClientAPI {
 }
