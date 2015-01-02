@@ -40,11 +40,11 @@ public class SimpleUser {
      * (non-doc)
      */
     public SimpleUser(JSONObject data) throws JSONException {
-        this.mDisplayName = data.getString("display_name");
         this.mExternalUrls = JsonParserUtil.getStringMap(data.getJSONObject("external_urls"));
-        this.mFollowers = new Followers(data.getJSONObject("followers"));
+        this.mFollowers = data.has("followers") && !data.isNull("followers") ? new Followers(data.getJSONObject("followers")) : null;
         this.mHref = data.getString("href");
         this.mId = data.getString("id");
+        this.mDisplayName = data.optString("display_name", mId);
         this.mImages = data.has("images") && !data.isNull("images") ? Image.getAll(data.getJSONArray("images")) : null;
         this.mType = data.getString("type");
         this.mUri = data.getString("uri");

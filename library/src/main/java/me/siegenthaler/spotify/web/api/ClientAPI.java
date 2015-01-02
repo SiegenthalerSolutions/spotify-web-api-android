@@ -29,12 +29,10 @@ import me.siegenthaler.spotify.web.api.request.ArtistListRequest;
 import me.siegenthaler.spotify.web.api.request.ArtistRelatedArtistsRequest;
 import me.siegenthaler.spotify.web.api.request.ArtistRequest;
 import me.siegenthaler.spotify.web.api.request.ArtistTopTrackRequest;
+import me.siegenthaler.spotify.web.api.request.AuthoriseClientFlowRequest;
+import me.siegenthaler.spotify.web.api.request.AuthoriseRefreshRequest;
 import me.siegenthaler.spotify.web.api.request.BrowseFeaturedPlaylistRequest;
 import me.siegenthaler.spotify.web.api.request.BrowseNewReleasesRequest;
-import me.siegenthaler.spotify.web.api.request.LibraryAddRequest;
-import me.siegenthaler.spotify.web.api.request.LibraryCheckRequest;
-import me.siegenthaler.spotify.web.api.request.LibraryGetRequest;
-import me.siegenthaler.spotify.web.api.request.LibraryRemoveRequest;
 import me.siegenthaler.spotify.web.api.request.PlaylistRequest;
 import me.siegenthaler.spotify.web.api.request.PlaylistTrackRequest;
 import me.siegenthaler.spotify.web.api.request.PlaylistUserRequest;
@@ -54,14 +52,36 @@ public class ClientAPI {
     private static final int DEFAULT_PORT = 443;
     private static final String DEFAULT_SCHEME = "https";
     private static final String DEFAULT_HOST = "api.spotify.com";
+    private static final String DEFAULT_AUTHENTICATION_HOST = "accounts.spotify.com";
 
     private final RequestQueue mRequestQueue;
+    private final ClientMusicAPI mClientMusicAPI;
 
     /**
      * (non-doc)
      */
     public ClientAPI(Context context) {
         this.mRequestQueue = Volley.newRequestQueue(context);
+        this.mClientMusicAPI = new ClientMusicAPI(this);
+    }
+
+    /**
+     * (non-doc)
+     */
+    public AuthoriseClientFlowRequest authorise(String clientId, String clientSecret) {
+        return addAuthenticationHeader(new AuthoriseClientFlowRequest())
+                .setAuthorisation(clientId, clientSecret)
+                .setType("client_credentials");
+    }
+
+    /**
+     * (non-doc)
+     */
+    public AuthoriseRefreshRequest refresh(String clientId, String clientSecret , String code, String redirectUri) {
+        return addAuthenticationHeader(new AuthoriseRefreshRequest())
+                .setAuthorisation(clientId, clientSecret)
+                .setCode(code)
+                .setRedirectUri(redirectUri);
     }
 
     /**
@@ -137,29 +157,8 @@ public class ClientAPI {
     /**
      * (non-doc)
      */
-    public LibraryCheckRequest containsMySavedTracks(String... ids) {
-        return addDefaultHeader(new LibraryCheckRequest()).setIds(ids);
-    }
-
-    /**
-     * (non-doc)
-     */
-    public LibraryAddRequest addToMySavedTracks(String... ids) {
-        return addDefaultHeader(new LibraryAddRequest()).setTracks(ids);
-    }
-
-    /**
-     * (non-doc)
-     */
-    public LibraryRemoveRequest removeFromMySavedTracks(String... ids) {
-        return addDefaultHeader(new LibraryRemoveRequest()).setTracks(ids);
-    }
-
-    /**
-     * (non-doc)
-     */
-    public LibraryGetRequest getMySavedTracks() {
-        return addDefaultHeader(new LibraryGetRequest());
+    public ClientMusicAPI getMyMusic() {
+        return mClientMusicAPI;
     }
 
     /**
@@ -238,11 +237,21 @@ public class ClientAPI {
     public UserElseRequest getUser(String id) {
         return addDefaultHeader(new UserElseRequest().setUser(id));
     }
+    /**
+     * (non-doc)
+     */
+    protected <T extends AbstractRequest<T, ?>> T addAuthenticationHeader(T request) {
+        return request
+                .setClient(mRequestQueue)
+                .setHost(DEFAULT_AUTHENTICATION_HOST)
+                .setScheme(DEFAULT_SCHEME)
+                .setPort(DEFAULT_PORT);
+    }
 
     /**
      * (non-doc)
      */
-    private <T extends AbstractRequest<T, ?>> T addDefaultHeader(T request) {
+    protected <T extends AbstractRequest<T, ?>> T addDefaultHeader(T request) {
         return request
                 .setClient(mRequestQueue)
                 .setHost(DEFAULT_HOST)

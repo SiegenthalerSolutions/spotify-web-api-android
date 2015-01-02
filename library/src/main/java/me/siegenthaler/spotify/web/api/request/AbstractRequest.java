@@ -15,12 +15,14 @@
  */
 package me.siegenthaler.spotify.web.api.request;
 
+import android.util.Log;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.ParseError;
-import com.android.volley.request.JsonRequest;
 import com.android.volley.toolbox.HttpHeaderParser;
 
 import org.apache.http.client.utils.URIUtils;
@@ -194,20 +196,29 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
     /**
      * (non-doc)
      */
-    public static final class BuiltJsonRequest<T> extends JsonRequest<T> {
+    public static final class BuiltJsonRequest<T> extends Request<T> {
         private final Map<String, String> mParameters;
         private final Map<String, String> mHeaders;
         private final ConstructCallback<T> mCallback;
+        private final Response.Listener<T> mListener;
 
         /**
          * (non-doc)
          */
         public BuiltJsonRequest(AbstractRequest builder, ConstructCallback<T> callback) {
-            super(builder.mMethod, builder.getQueryPath(), (builder.mRawBody == null) ? null : builder.mRawBody,
-                    builder.mListener, builder.mErrorListener);
+            super(builder.mMethod, builder.getQueryPath(), builder.mErrorListener);
+            this.mListener = builder.mListener;
             this.mParameters = builder.mParameters;
             this.mHeaders = builder.mHeaders;
             this.mCallback = callback;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String getBodyContentType() {
+            return "application/x-www-form-urlencoded; charset=UTF-8";
         }
 
         /**
@@ -241,6 +252,16 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
                 return Response.error(new ParseError(e));
             } catch (JSONException je) {
                 return Response.error(new ParseError(je));
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void deliverResponse(T response) {
+            if (mListener != null) {
+                mListener.onResponse(response);
             }
         }
     }

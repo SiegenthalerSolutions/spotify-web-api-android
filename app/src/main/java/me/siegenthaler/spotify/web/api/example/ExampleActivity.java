@@ -28,6 +28,7 @@ import me.siegenthaler.spotify.web.api.ClientAPI;
 import me.siegenthaler.spotify.web.api.model.Album;
 import me.siegenthaler.spotify.web.api.model.Page;
 import me.siegenthaler.spotify.web.api.model.SimplePlaylist;
+import me.siegenthaler.spotify.web.api.model.Token;
 import me.siegenthaler.spotify.web.api.model.Track;
 
 /**
@@ -44,12 +45,23 @@ public class ExampleActivity extends Activity {
         super.onCreate(instance);
 
         mClient = new ClientAPI(getApplicationContext());
+        mClient.authorise("<client id>", "<client secret>")
+                .setListener(new Response.Listener<Token>() {
+                    @Override
+                    public void onResponse(Token o) {
+                        queryMore(o.getToken());
+                    }
+                }).send();
+    }
+
+    private void queryMore(String token)
+    {
         mClient.getAlbum("2dIGnmEIy1WZIcZCFSj6i8").setListener(new Response.Listener<Album>() {
             @Override
             public void onResponse(Album album) {
                 Log.d("Album", album.getName());
             }
-        }).send();
+        }).addHeader("Authorization", "Bearer " + token).send();
 
         mClient.searchTrack("ihre persönliche glücksmelodie").setListener(new Response.Listener<Page<Track>>() {
             @Override
@@ -59,7 +71,7 @@ public class ExampleActivity extends Activity {
                     Log.d("Track", item.getArtist(0).getName() + " - " + item.getName());
                 }
             }
-        }).send();
+        }).addHeader("Authorization", "Bearer " + token).send();
 
         mClient.getPlaylists("wolftein").setListener(new Response.Listener<Page<SimplePlaylist>>() {
             @Override
@@ -72,8 +84,8 @@ public class ExampleActivity extends Activity {
         }).setErrorListener(new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.d("Playlist", volleyError.toString());  // Will trigger no authentication error
+                Log.d("Playlist", volleyError.toString());
             }
-        }).send();
+        }).addHeader("Authorization", "Bearer " + token).send();
     }
 }

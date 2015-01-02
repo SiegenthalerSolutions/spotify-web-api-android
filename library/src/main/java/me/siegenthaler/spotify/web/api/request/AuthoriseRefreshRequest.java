@@ -15,7 +15,9 @@
  */
 package me.siegenthaler.spotify.web.api.request;
 
-import android.text.TextUtils;
+import android.util.Base64;
+
+import com.android.volley.Request;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,42 +27,31 @@ import me.siegenthaler.spotify.web.api.model.Token;
 /**
  * (non-doc)
  */
-public final class AuthoriseFlowRequest extends AbstractRequest<AuthoriseFlowRequest, Token> {
+public final class AuthoriseRefreshRequest extends AbstractRequest<AuthoriseRefreshRequest, Token> {
     /**
      * (non-doc)
      */
-    public AuthoriseFlowRequest setAuthorisation(String id) {
-        setPath("/authorize");
-        addParameter("response_type", "code");
-        return addParameter("client_id", id);
+    public AuthoriseRefreshRequest setAuthorisation(String id, String secret) {
+        setMethod(Request.Method.POST);
+        setPath("/api/token");
+        addParameter("grant_type", "authorization_code");
+        return addHeader(
+                "Authorization",
+                "Basic " + Base64.encodeToString((id + ":" + secret).getBytes(), Base64.NO_WRAP));
     }
 
     /**
      * (non-doc)
      */
-    public AuthoriseFlowRequest setRedirectUrl(String url) {
-        return addParameter("redirect_uri", url);
+    public AuthoriseRefreshRequest setCode(String code) {
+        return addParameter("code", code);
     }
 
     /**
      * (non-doc)
      */
-    public AuthoriseFlowRequest setState(String state) {
-        return addParameter("state", state);
-    }
-
-    /**
-     * (non-doc)
-     */
-    public AuthoriseFlowRequest setScopes(String... scopes) {
-        return addParameter("scope", TextUtils.join(" ", scopes));
-    }
-
-    /**
-     * (non-doc)
-     */
-    public AuthoriseFlowRequest setForceDialog(boolean isForced) {
-        return addParameter("show_dialog", isForced ? "true" : "false");
+    public AuthoriseRefreshRequest setRedirectUri(String uri) {
+        return addParameter("redirect_uri", uri);
     }
 
     /**
