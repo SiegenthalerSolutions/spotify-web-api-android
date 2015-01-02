@@ -25,6 +25,9 @@ import java.io.IOException;
  * (non-doc)
  */
 public abstract class FollowRequest<J extends FollowRequest<J>> extends AbstractRequest<J, String> {
+    public final static String TYPE_ARTIST = "artist";
+    public final static String TYPE_USER = "user";
+
     protected boolean mDelete;
 
     /**

@@ -28,6 +28,9 @@ import java.util.List;
  * (non-doc)
  */
 public abstract class FollowCheckRequest<J extends FollowCheckRequest<J>> extends AbstractRequest<J, List<Boolean>> {
+    public final static String TYPE_ARTIST = "artist";
+    public final static String TYPE_USER = "user";
+
     /**
      * (non-doc)
      */

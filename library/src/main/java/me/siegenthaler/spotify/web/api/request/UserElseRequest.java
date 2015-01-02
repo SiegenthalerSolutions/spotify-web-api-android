@@ -15,14 +15,32 @@
  */
 package me.siegenthaler.spotify.web.api.request;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Locale;
+
+import me.siegenthaler.spotify.web.api.model.User;
+
 /**
- *
+ * (non-doc)
  */
-public class FollowUserRequest extends FollowRequest<FollowUserRequest> {
+public final class UserElseRequest extends AbstractRequest<UserElseRequest, User> {
     /**
      * (non-doc)
      */
-    public FollowUserRequest() {
-        setType("user");
+    public UserElseRequest setUser(String id) {
+        return setPath(String.format(Locale.ENGLISH, "/v1/users/%s", id));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public User getResponse() throws IOException, JSONException {
+        final String data = get();
+        final JSONObject object = new JSONObject(data);
+        return new User(object);
     }
 }

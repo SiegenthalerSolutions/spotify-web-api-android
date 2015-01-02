@@ -15,14 +15,31 @@
  */
 package me.siegenthaler.spotify.web.api.request;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import me.siegenthaler.spotify.web.api.model.User;
+
 /**
- *
+ * (non-doc)
  */
-public final class FollowCheckArtistRequest extends FollowCheckRequest<FollowCheckArtistRequest> {
+public final class UserRequest extends AbstractRequest<UserRequest, User> {
     /**
      * (non-doc)
      */
-    public FollowCheckArtistRequest() {
-        setType("artist");
+    public UserRequest() {
+        setPath("/v1/me");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public User getResponse() throws IOException, JSONException {
+        final String data = get();
+        final JSONObject object = new JSONObject(data);
+        return new User(object);
     }
 }
