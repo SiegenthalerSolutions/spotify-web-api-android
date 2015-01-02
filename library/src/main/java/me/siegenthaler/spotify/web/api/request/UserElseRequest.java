@@ -21,12 +21,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Locale;
 
-import me.siegenthaler.spotify.web.api.model.User;
+import me.siegenthaler.spotify.web.api.model.SimpleUser;
 
 /**
  * (non-doc)
  */
-public final class UserElseRequest extends AbstractRequest<UserElseRequest, User> {
+public final class UserElseRequest extends AbstractRequest<UserElseRequest, SimpleUser> {
     /**
      * (non-doc)
      */
@@ -38,9 +38,9 @@ public final class UserElseRequest extends AbstractRequest<UserElseRequest, User
      * {@inheritDoc}
      */
     @Override
-    public User getResponse() throws IOException, JSONException {
+    public SimpleUser getResponse() throws IOException, JSONException {
         final String data = get();
         final JSONObject object = new JSONObject(data);
-        return new User(object);
+        return new SimpleUser(object);
     }
 }
