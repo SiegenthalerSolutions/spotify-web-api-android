@@ -27,23 +27,13 @@ import java.util.List;
 /**
  * (non-doc)
  */
-public final class FollowCheckRequest  extends AbstractRequest<FollowCheckRequest, List<Boolean>> {
-    public final static String TYPE_ARTIST = "artist";
-    public final static String TYPE_USER = "user";
-
+public final class LibraryCheckRequest extends AbstractRequest<LibraryCheckRequest, List<Boolean>> {
     /**
      * (non-doc)
      */
-    public FollowCheckRequest setIds(String... ids) {
-        setPath("/v1/me/following");
+    public LibraryCheckRequest setIds(String... ids) {
+        setPath("v1/me/tracks/contains");
         return addParameter("ids", TextUtils.join(",", ids));
-    }
-
-    /**
-     * (non-doc)
-     */
-    public FollowCheckRequest setType(String type) {
-        return addParameter("type", type);
     }
 
     /**

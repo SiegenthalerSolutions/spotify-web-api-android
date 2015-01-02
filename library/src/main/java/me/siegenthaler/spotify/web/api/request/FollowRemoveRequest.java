@@ -17,24 +17,21 @@ package me.siegenthaler.spotify.web.api.request;
 
 import android.text.TextUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * (non-doc)
  */
-public final class FollowCheckRequest  extends AbstractRequest<FollowCheckRequest, List<Boolean>> {
+public final class FollowRemoveRequest extends AbstractRequest<FollowRemoveRequest, Void> {
     public final static String TYPE_ARTIST = "artist";
     public final static String TYPE_USER = "user";
 
     /**
      * (non-doc)
      */
-    public FollowCheckRequest setIds(String... ids) {
+    public FollowRemoveRequest setIds(String... ids) {
         setPath("/v1/me/following");
         return addParameter("ids", TextUtils.join(",", ids));
     }
@@ -42,7 +39,7 @@ public final class FollowCheckRequest  extends AbstractRequest<FollowCheckReques
     /**
      * (non-doc)
      */
-    public FollowCheckRequest setType(String type) {
+    public FollowRemoveRequest setType(String type) {
         return addParameter("type", type);
     }
 
@@ -50,14 +47,8 @@ public final class FollowCheckRequest  extends AbstractRequest<FollowCheckReques
      * {@inheritDoc}
      */
     @Override
-    public List<Boolean> getResponse() throws IOException, JSONException {
-        final String data = get();
-        final JSONArray object = new JSONArray(data);
-
-        final List<Boolean> result = new ArrayList<>(object.length());
-        for (int i = 0, j = result.size(); i < j; i++) {
-            result.add(object.getBoolean(i));
-        }
-        return result;
+    public Void getResponse() throws IOException, JSONException {
+        delete();
+        return null;
     }
 }
