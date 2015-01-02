@@ -31,6 +31,9 @@ import me.siegenthaler.spotify.web.api.request.ArtistRequest;
 import me.siegenthaler.spotify.web.api.request.ArtistTopTrackRequest;
 import me.siegenthaler.spotify.web.api.request.BrowseFeaturedPlaylistRequest;
 import me.siegenthaler.spotify.web.api.request.BrowseNewReleasesRequest;
+import me.siegenthaler.spotify.web.api.request.PlaylistRequest;
+import me.siegenthaler.spotify.web.api.request.PlaylistTrackRequest;
+import me.siegenthaler.spotify.web.api.request.PlaylistUserRequest;
 import me.siegenthaler.spotify.web.api.request.SearchAlbumRequest;
 import me.siegenthaler.spotify.web.api.request.SearchArtistRequest;
 import me.siegenthaler.spotify.web.api.request.SearchPlaylistRequest;
@@ -125,6 +128,27 @@ public class ClientAPI {
      */
     public BrowseNewReleasesRequest browseAlbumReleases() {
         return addDefaultHeader(new BrowseNewReleasesRequest());
+    }
+
+    /**
+     * (non-doc)
+     */
+    public PlaylistRequest getPlaylist(String user, String id) {
+        return addDefaultHeader(new PlaylistRequest()).setPlaylist(user, id);
+    }
+
+    /**
+     * (non-doc)
+     */
+    public PlaylistTrackRequest getPlaylistTracks(String user, String id) {
+        return addDefaultHeader(new PlaylistTrackRequest()).setPlaylist(user, id);
+    }
+
+    /**
+     * (non-doc)
+     */
+    public PlaylistUserRequest getPlaylists(String user) {
+        return addDefaultHeader(new PlaylistUserRequest()).setUser(user);
     }
 
     /**

@@ -27,6 +27,7 @@ import java.util.List;
 import me.siegenthaler.spotify.web.api.ClientAPI;
 import me.siegenthaler.spotify.web.api.model.Album;
 import me.siegenthaler.spotify.web.api.model.Page;
+import me.siegenthaler.spotify.web.api.model.SimplePlaylist;
 import me.siegenthaler.spotify.web.api.model.Track;
 
 /**
@@ -48,11 +49,6 @@ public class ExampleActivity extends Activity {
             public void onResponse(Album album) {
                 Log.d("Album", album.getName());
             }
-        }).setErrorListener(new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.d("Album", volleyError.toString());
-            }
         }).send();
 
         mClient.searchTrack("ihre persönliche glücksmelodie").setListener(new Response.Listener<Page<Track>>() {
@@ -63,10 +59,20 @@ public class ExampleActivity extends Activity {
                     Log.d("Track", item.getArtist(0).getName() + " - " + item.getName());
                 }
             }
+        }).send();
+
+        mClient.getPlaylists("wolftein").setListener(new Response.Listener<Page<SimplePlaylist>>() {
+            @Override
+            public void onResponse(Page<SimplePlaylist> playlists) {
+                final List<SimplePlaylist> items = playlists.getItems();
+                for (SimplePlaylist item : items) {
+                    Log.d("Playlist", item.getName());
+                }
+            }
         }).setErrorListener(new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.d("Album", volleyError.toString());
+                Log.d("Playlist", volleyError.toString());  // Will trigger no authentication error
             }
         }).send();
     }
