@@ -42,7 +42,7 @@ public final class AlbumListRequest extends AbstractRequest<AlbumListRequest, Li
      */
     @Override
     public List<Album> getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
         return Album.getAll(object.getJSONArray("albums"));
     }

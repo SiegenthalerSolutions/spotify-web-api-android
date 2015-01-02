@@ -42,7 +42,7 @@ public final class ArtistListRequest extends AbstractRequest<ArtistListRequest, 
      */
     @Override
     public List<Artist> getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
         return Artist.getAll(object.getJSONArray("artists"));
     }

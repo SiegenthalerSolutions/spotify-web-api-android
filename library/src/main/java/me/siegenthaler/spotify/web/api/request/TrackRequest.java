@@ -39,7 +39,7 @@ public final class TrackRequest extends AbstractRequest<TrackRequest, Track> {
      */
     @Override
     public Track getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
         return new Track(object);
     }

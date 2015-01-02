@@ -39,7 +39,7 @@ public final class UserElseRequest extends AbstractRequest<UserElseRequest, Simp
      */
     @Override
     public SimpleUser getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
         return new SimpleUser(object);
     }

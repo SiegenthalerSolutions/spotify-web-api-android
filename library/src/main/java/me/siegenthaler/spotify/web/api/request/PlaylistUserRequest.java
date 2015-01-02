@@ -41,7 +41,7 @@ public final class PlaylistUserRequest extends AbstractPageRequest<PlaylistUserR
      */
     @Override
     public Page<SimplePlaylist> getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
 
         final List<SimplePlaylist> list = SimplePlaylist.getAllSimple(object.getJSONArray("items"));

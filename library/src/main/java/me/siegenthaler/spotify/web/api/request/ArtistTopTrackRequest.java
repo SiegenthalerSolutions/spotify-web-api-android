@@ -47,7 +47,7 @@ public final class ArtistTopTrackRequest extends AbstractRequest<ArtistTopTrackR
      */
     @Override
     public List<Track> getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
 
         final List<Track> tracks = Track.getAll(object.getJSONArray("tracks"));

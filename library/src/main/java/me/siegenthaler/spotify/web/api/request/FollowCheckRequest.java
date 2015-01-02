@@ -51,7 +51,7 @@ public final class FollowCheckRequest  extends AbstractRequest<FollowCheckReques
      */
     @Override
     public List<Boolean> getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONArray object = new JSONArray(data);
 
         final List<Boolean> result = new ArrayList<>(object.length());

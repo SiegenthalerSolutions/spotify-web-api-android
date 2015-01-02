@@ -38,7 +38,7 @@ public final class LibraryAddRequest extends AbstractRequest<LibraryAddRequest, 
      */
     @Override
     public Void getResponse() throws IOException, JSONException {
-        put();
+        request(METHOD_PUT);
         return null;
     }
 }

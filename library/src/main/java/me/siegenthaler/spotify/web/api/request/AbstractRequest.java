@@ -31,6 +31,11 @@ import me.siegenthaler.spotify.web.api.RestClient;
  */
 @SuppressWarnings("unchecked")
 public abstract class AbstractRequest<J extends AbstractRequest, T> {
+    public final static String METHOD_GET = "GET";
+    public final static String METHOD_POST = "POST";
+    public final static String METHOD_PUT = "PUT";
+    public final static String METHOD_DELETE = "DELETE";
+
     public RestClient mClient;
     public String mHost;
     public String mPath;
@@ -38,6 +43,7 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
     public List<NameValuePair> mHeaders = new ArrayList<>();
     public List<NameValuePair> mBodyParameters = new ArrayList<>();
     public JSONObject mJSONBody;
+    public String mMethod;
 
     /**
      * (non-doc)
@@ -47,29 +53,8 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
     /**
      * (non-doc)
      */
-    final public String post() throws IOException {
-        return mClient.post(this);
-    }
-
-    /**
-     * (non-doc)
-     */
-    final public String get() throws IOException {
-        return mClient.get(this);
-    }
-
-    /**
-     * (non-doc)
-     */
-    final public String put() throws IOException {
-        return mClient.put(this);
-    }
-
-    /**
-     * (non-doc)
-     */
-    final public String delete() throws IOException {
-        return mClient.delete(this);
+    final public String request(String method) throws IOException {
+        return mClient.request(this, method);
     }
 
     /**

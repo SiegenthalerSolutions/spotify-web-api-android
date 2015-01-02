@@ -26,17 +26,5 @@ public interface RestClient {
     /**
      * (non-doc)
      */
-    public String post(AbstractRequest request) throws IOException;
-    /**
-     * (non-doc)
-     */
-    public String get(AbstractRequest request) throws IOException;
-    /**
-     * (non-doc)
-     */
-    public String put(AbstractRequest request) throws IOException;
-    /**
-     * (non-doc)
-     */
-    public String delete(AbstractRequest request) throws IOException;
+    public String request(AbstractRequest request, String method) throws IOException;
 }

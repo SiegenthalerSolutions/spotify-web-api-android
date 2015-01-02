@@ -48,7 +48,7 @@ public final class FollowAddRequest extends AbstractRequest<FollowAddRequest, Vo
      */
     @Override
     public Void getResponse() throws IOException, JSONException {
-        put();
+        request(METHOD_PUT);
         return null;
     }
 }

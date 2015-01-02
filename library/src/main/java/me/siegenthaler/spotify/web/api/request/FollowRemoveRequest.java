@@ -48,7 +48,7 @@ public final class FollowRemoveRequest extends AbstractRequest<FollowRemoveReque
      */
     @Override
     public Void getResponse() throws IOException, JSONException {
-        delete();
+        request(METHOD_DELETE);
         return null;
     }
 }

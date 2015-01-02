@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.siegenthaler.spotify.web.api;
+package me.siegenthaler.spotify.web.api.client;
 
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -32,12 +32,13 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.List;
 
+import me.siegenthaler.spotify.web.api.RestClient;
 import me.siegenthaler.spotify.web.api.request.AbstractRequest;
 
 /**
  * (non-doc)
  */
-@SuppressWarnings("unchecked")
+
 public class RestOkHttpClient implements RestClient {
     public static final int DEFAULT_PORT = 443;
     public static final String DEFAULT_SCHEME = "https";
@@ -45,61 +46,11 @@ public class RestOkHttpClient implements RestClient {
     private final OkHttpClient mClient = new OkHttpClient();
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    final public String post(AbstractRequest request) throws IOException {
-        final Request.Builder builder = addHeaderForRequest(request);
-        if (request.mJSONBody != null) {
-            builder.post(RequestBody.create(
-                    MediaType.parse("application/json; charset=utf-8"),
-                    request.mJSONBody.toString()));
-        } else if (request.mBodyParameters.size() > 0) {
-            builder.post(RequestBody.create(
-                    MediaType.parse("application/x-www-form-urlencoded; charset=utf-8"),
-                    getQuery(request.mBodyParameters)));
-        }
-        return sendRequest(builder.build());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    final public String get(AbstractRequest request) throws IOException {
-        return sendRequest(addHeaderForRequest(request).get().build());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    final public String put(AbstractRequest request) throws IOException {
-        final Request.Builder builder = addHeaderForRequest(request);
-        if (request.mJSONBody != null) {
-            builder.put(RequestBody.create(
-                    MediaType.parse("application/json; charset=utf-8"),
-                    request.mJSONBody.toString()));
-        } else if (request.mBodyParameters.size() > 0) {
-            builder.put(RequestBody.create(
-                    MediaType.parse("application/x-www-form-urlencoded; charset=utf-8"),
-                    getQuery(request.mBodyParameters)));
-        }
-        return sendRequest(builder.build());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    final public String delete(AbstractRequest request) throws IOException {
-        return sendRequest(addHeaderForRequest(request).delete().build());
-    }
-
-    /**
      * (non-doc)
      */
-    private Request.Builder addHeaderForRequest(AbstractRequest request) throws IOException {
+    @SuppressWarnings("unchecked")
+    @Override
+    public String request(AbstractRequest request, String method) throws IOException {
         final List<NameValuePair> collection = request.mParameters;
         final List<NameValuePair> headers = request.mHeaders;
 
@@ -119,14 +70,17 @@ public class RestOkHttpClient implements RestClient {
         for (NameValuePair pair : headers) {
             builder.header(pair.getName(), pair.getValue());
         }
-        return builder;
-    }
+        if (request.mJSONBody != null) {
+            builder.method(method, RequestBody.create(
+                    MediaType.parse("application/json; charset=utf-8"),
+                    request.mJSONBody.toString()));
+        } else if (request.mBodyParameters.size() > 0) {
+            builder.method(method, RequestBody.create(
+                    MediaType.parse("application/x-www-form-urlencoded; charset=utf-8"),
+                    getQuery(request.mBodyParameters)));
+        }
 
-    /**
-     * (non-doc)
-     */
-    private String sendRequest(Request request) throws IOException {
-        final Response response = mClient.newCall(request).execute();
+        final Response response = mClient.newCall(builder.build()).execute();
         if (!response.isSuccessful()) {
             throw new IOException("Unexpected code: " + response.code());
         }

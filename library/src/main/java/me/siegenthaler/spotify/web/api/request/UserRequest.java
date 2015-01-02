@@ -38,7 +38,7 @@ public final class UserRequest extends AbstractRequest<UserRequest, User> {
      */
     @Override
     public User getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
         return new User(object);
     }

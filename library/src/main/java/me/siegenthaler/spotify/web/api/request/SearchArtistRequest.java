@@ -40,7 +40,7 @@ public final class SearchArtistRequest extends SearchRequest<SearchArtistRequest
      */
     @Override
     public Page<Artist> getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
         final JSONObject root = object.getJSONObject("artists");
 

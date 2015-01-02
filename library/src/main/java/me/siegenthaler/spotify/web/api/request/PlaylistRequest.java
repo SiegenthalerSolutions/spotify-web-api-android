@@ -46,7 +46,7 @@ public final class PlaylistRequest extends AbstractRequest<PlaylistRequest, Play
      */
     @Override
     public Playlist getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
         return new Playlist(object);
     }

@@ -40,7 +40,7 @@ public final class SearchPlaylistRequest extends SearchRequest<SearchPlaylistReq
      */
     @Override
     public Page<SimplePlaylist> getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
         final JSONObject root = object.getJSONObject("playlists");
 

@@ -42,7 +42,7 @@ public final class TrackListRequest extends AbstractRequest<TrackListRequest, Li
      */
     @Override
     public List<Track> getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
         return Track.getAll(object.getJSONArray("tracks"));
     }

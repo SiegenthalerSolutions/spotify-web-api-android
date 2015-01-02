@@ -38,7 +38,7 @@ public final class LibraryRemoveRequest extends AbstractRequest<LibraryRemoveReq
      */
     @Override
     public Void getResponse() throws IOException, JSONException {
-        delete();
+        request(METHOD_DELETE);
         return null;
     }
 }

@@ -40,8 +40,7 @@ public final class SearchAlbumRequest extends SearchRequest<SearchAlbumRequest, 
      */
     @Override
     public Page<SimpleAlbum> getResponse() throws IOException, JSONException {
-
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
         final JSONObject root = object.getJSONObject("albums");
 

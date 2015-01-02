@@ -39,7 +39,7 @@ public final class ArtistRequest extends AbstractRequest<ArtistRequest, Artist> 
      */
     @Override
     public Artist getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
         return new Artist(object);
     }

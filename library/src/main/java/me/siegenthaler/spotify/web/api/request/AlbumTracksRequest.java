@@ -41,7 +41,7 @@ public final class AlbumTracksRequest extends AbstractPageRequest<AlbumTracksReq
      */
     @Override
     public Page<SimpleTrack> getResponse() throws IOException, JSONException {
-        final String data = get();
+        final String data = request(METHOD_GET);
         final JSONObject object = new JSONObject(data);
         final JSONObject root = object.getJSONObject("tracks");
 
