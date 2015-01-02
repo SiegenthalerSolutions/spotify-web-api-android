@@ -36,7 +36,7 @@ public class Playlist extends SimpleBasePlaylist {
      */
     static public List<Playlist> getAll(JSONArray array) throws JSONException {
         final List<Playlist> playlist = new ArrayList<>(array.length());
-        for (int i = 0, j = playlist.size(); i < j; i++) {
+        for (int i = 0, j = array.length(); i < j; i++) {
             playlist.add(new Playlist(array.getJSONObject(i)));
         }
         return playlist;
@@ -49,7 +49,7 @@ public class Playlist extends SimpleBasePlaylist {
         final JSONArray items = array.getJSONArray("items");
 
         final List<Information> list = new ArrayList<>(items.length());
-        for (int i = 0, j = list.size(); i < j; i++) {
+        for (int i = 0, j = array.length(); i < j; i++) {
             list.add(new Information(items.getJSONObject(i)));
         }
         return new Page<>(list, array);
