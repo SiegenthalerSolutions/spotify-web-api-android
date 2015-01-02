@@ -57,8 +57,8 @@ public class Album extends SimpleAlbum {
     public Album(JSONObject data) throws JSONException {
         super(data);
         this.mArtists = SimpleArtist.getAllSimple(data.getJSONArray("artists"));
-        this.mCopyrights = JsonParserUtil.getNameValueList(data.getJSONArray("copyrights"));
-        this.mExternalIds = JsonParserUtil.getStringMap(data.getJSONArray("external_ids"));
+        this.mCopyrights = JsonParserUtil.getCopyrightsList(data.getJSONArray("copyrights"));
+        this.mExternalIds = JsonParserUtil.getStringMap(data.getJSONObject("external_ids"));
         this.mGenres = JsonParserUtil.getStringList(data.getJSONArray("genres"));
         this.mPopularity = data.getInt("popularity");
         this.mReleaseDate = data.getString("release_date");

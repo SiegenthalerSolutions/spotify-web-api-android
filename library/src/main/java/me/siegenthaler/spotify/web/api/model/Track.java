@@ -51,7 +51,7 @@ public class Track extends SimpleTrack {
     public Track(JSONObject data) throws JSONException {
         super(data);
         this.mAlbum = new SimpleAlbum(data.getJSONObject("album"));
-        this.mExternalIds = JsonParserUtil.getStringMap(data.getJSONArray("external_ids"));
+        this.mExternalIds = JsonParserUtil.getStringMap(data.getJSONObject("external_ids"));
         this.mPopularity = data.getInt("popularity");
     }
 

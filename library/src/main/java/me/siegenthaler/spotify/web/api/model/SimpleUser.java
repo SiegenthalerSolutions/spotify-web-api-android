@@ -42,7 +42,7 @@ public class SimpleUser {
      */
     public SimpleUser(JSONObject data) throws JSONException {
         this.mDisplayName = data.getString("display_name");
-        this.mExternalUrls = JsonParserUtil.getStringMap(data.getJSONArray("external_urls"));
+        this.mExternalUrls = JsonParserUtil.getStringMap(data.getJSONObject("external_urls"));
         this.mFollowers = new Followers(data.getJSONObject("followers"));
         this.mHref = data.getString("href");
         this.mId = data.getString("id");

@@ -57,7 +57,7 @@ public class SimpleAlbum {
     public SimpleAlbum(JSONObject data) throws JSONException {
         this.mAlbumType = data.getString("album_type");
         this.mAvailableMarkets = JsonParserUtil.getStringList(data.getJSONArray("available_markets"));
-        this.mExternalUrls = JsonParserUtil.getStringMap(data.getJSONArray("external_urls"));
+        this.mExternalUrls = JsonParserUtil.getStringMap(data.getJSONObject("external_urls"));
         this.mHref = data.getString("href");
         this.mId = data.getString("id");
         this.mImages = Image.getAll(data.getJSONArray("images"));

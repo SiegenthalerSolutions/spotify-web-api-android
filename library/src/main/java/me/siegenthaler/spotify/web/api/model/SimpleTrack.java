@@ -64,7 +64,7 @@ public class SimpleTrack {
         this.mDiscNumber = data.getInt("disc_number");
         this.mDuration = data.getLong("duration");
         this.mExplicit = data.getBoolean("explicit");
-        this.mExternalUrls = JsonParserUtil.getStringMap(data.getJSONArray("external_urls"));
+        this.mExternalUrls = JsonParserUtil.getStringMap(data.getJSONObject("external_urls"));
         this.mHref = data.getString("href");
         this.mId = data.getString("id");
         this.mName = data.getString("name");

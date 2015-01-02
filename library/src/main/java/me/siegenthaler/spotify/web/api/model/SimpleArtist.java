@@ -52,7 +52,7 @@ public class SimpleArtist {
      * (non-doc)
      */
     public SimpleArtist(JSONObject data) throws JSONException {
-        this.mExternalUrls = JsonParserUtil.getStringMap(data.getJSONArray("external_urls"));
+        this.mExternalUrls = JsonParserUtil.getStringMap(data.getJSONObject("external_urls"));
         this.mHref = data.getString("href");
         this.mId = data.getString("id");
         this.mName = data.getString("name");

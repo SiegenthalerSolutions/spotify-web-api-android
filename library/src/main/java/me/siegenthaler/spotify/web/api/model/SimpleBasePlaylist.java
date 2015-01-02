@@ -15,11 +15,9 @@
  */
 package me.siegenthaler.spotify.web.api.model;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +44,7 @@ public class SimpleBasePlaylist {
      */
     public SimpleBasePlaylist(JSONObject data) throws JSONException {
         this.mCollaborative = data.getBoolean("collaborative");
-        this.mExternalUrls = JsonParserUtil.getStringMap(data.getJSONArray("external_urls"));
+        this.mExternalUrls = JsonParserUtil.getStringMap(data.getJSONObject("external_urls"));
         this.mHref = data.getString("href");
         this.mId = data.getString("id");
         this.mImages = data.has("images") && !data.isNull("images") ? Image.getAll(data.getJSONArray("images")) : null;
