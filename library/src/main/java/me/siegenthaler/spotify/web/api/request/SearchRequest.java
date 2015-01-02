@@ -22,7 +22,7 @@ public abstract class SearchRequest<J extends SearchRequest<J, T>, T> extends Ab
     /**
      * (non-doc)
      */
-    final public SearchRequest<J, T> setQuery(String query) {
+    final public J setQuery(String query) {
         setPath("/v1/search");
         return addParameter("q", query);
     }
@@ -30,14 +30,14 @@ public abstract class SearchRequest<J extends SearchRequest<J, T>, T> extends Ab
     /**
      * (non-doc)
      */
-    final public SearchRequest<J, T> setMarket(String market) {
+    final public J setMarket(String market) {
         return addParameter("market", market);
     }
 
     /**
      * (non-doc)
      */
-    final public SearchRequest<J, T> setType(String type) {
+    final public J setType(String type) {
         return addParameter("type", type);
     }
 }

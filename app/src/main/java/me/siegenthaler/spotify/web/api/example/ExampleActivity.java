@@ -24,60 +24,50 @@ import com.android.volley.error.VolleyError;
 
 import java.util.List;
 
-import me.siegenthaler.spotify.web.api.RestClient;
+import me.siegenthaler.spotify.web.api.ClientAPI;
+import me.siegenthaler.spotify.web.api.model.Album;
 import me.siegenthaler.spotify.web.api.model.Page;
 import me.siegenthaler.spotify.web.api.model.Track;
-import me.siegenthaler.spotify.web.api.request.AbstractRequest;
-import me.siegenthaler.spotify.web.api.request.SearchTrackRequest;
 
 /**
  *
  */
 public class ExampleActivity extends Activity {
-    public static final int DEFAULT_PORT = 443;
-    public static final String DEFAULT_SCHEME = "https";
-    public static final String DEFAULT_HOST = "api.spotify.com";
+    private ClientAPI mClient;
 
-    private RestClient mClient;
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle instance) {
         super.onCreate(instance);
 
-        mClient = new RestClient();
-        mClient.init(getApplicationContext());
+        mClient = new ClientAPI(getApplicationContext());
+        mClient.getAlbum("2dIGnmEIy1WZIcZCFSj6i8").setListener(new Response.Listener<Album>() {
+            @Override
+            public void onResponse(Album album) {
+                Log.d("Album", album.getName());
+            }
+        }).setErrorListener(new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d("Album", volleyError.toString());
+            }
+        }).send();
 
-        mClient.getRequestQueue().add(addDefaultHeader(new SearchTrackRequest())
-                .setQuery("Skrillex")
-                .setOffset(0)
-                .setErrorListener(new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Log.e("Spotify-Web-Api", volleyError.toString());
-                    }
-                })
-                .setListener(new Response.Listener<Page<Track>>() {
-                    @Override
-                    public void onResponse(Page<Track> o) {
-                        Log.d("A", o.getHref());
-                        Log.d("A", o.getNext());
-                        Log.d("A", o.getPrevious());
-                        Log.d("A", "" + o.getTotal());
-                        Log.d("A", "" + o.getLimit());
-
-                        List<Track> tracks = o.getItems();
-                        for (int i = 0; i < tracks.size(); i++) {
-                            Log.d("Spotify-Web-Api", tracks.get(i).getName());
-                        }
-                        Log.d("Spotify-Web-Api", o.getHref());
-                    }
-                })
-                .setLimit(50).build());
-    }
-
-    private <T extends AbstractRequest<T, ?>> T addDefaultHeader(T request) {
-        return request.setHost(DEFAULT_HOST)
-                .setScheme(DEFAULT_SCHEME)
-                .setPort(DEFAULT_PORT);
+        mClient.searchTrack("ihre persönliche glücksmelodie").setListener(new Response.Listener<Page<Track>>() {
+            @Override
+            public void onResponse(Page<Track> tracks) {
+                final List<Track> items = tracks.getItems();
+                for (Track item : items) {
+                    Log.d("Track", item.getArtist(0).getName() + " - " + item.getName());
+                }
+            }
+        }).setErrorListener(new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d("Album", volleyError.toString());
+            }
+        }).send();
     }
 }

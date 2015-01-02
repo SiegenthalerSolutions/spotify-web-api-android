@@ -17,6 +17,7 @@ package me.siegenthaler.spotify.web.api.request;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.error.ParseError;
 import com.android.volley.request.JsonRequest;
@@ -46,11 +47,12 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
     protected String mRawBody;
     protected Response.Listener mListener;
     protected Response.ErrorListener mErrorListener;
+    protected RequestQueue mRequestQueue;
 
     /**
      * (non-doc)
      */
-    public abstract T getResponse(String data) throws JSONException;
+    protected abstract T getResponse(String data) throws JSONException;
 
     /**
      * (non-doc)
@@ -62,6 +64,13 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
                 return getResponse(data);
             }
         });
+    }
+
+    /**
+     * (non-doc)
+     */
+    final public void send() {
+        mRequestQueue.add(build());
     }
 
     /**
@@ -80,6 +89,14 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
         } catch (URISyntaxException exception) {
             throw new IllegalStateException(exception);
         }
+    }
+
+    /**
+     * (non-doc)
+     */
+    final public J setClient(RequestQueue queue) {
+        this.mRequestQueue = queue;
+        return (J) this;
     }
 
     /**
