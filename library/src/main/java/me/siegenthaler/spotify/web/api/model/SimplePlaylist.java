@@ -33,7 +33,7 @@ public class SimplePlaylist extends SimpleBasePlaylist {
      */
     static public List<SimplePlaylist> getAllSimple(JSONArray array) throws JSONException {
         final List<SimplePlaylist> playlist = new ArrayList<>(array.length());
-        for (int i = 0, j = playlist.size(); i < j; i++) {
+        for (int i = 0, j = array.length(); i < j; i++) {
             playlist.add(new SimplePlaylist(array.getJSONObject(i)));
         }
         return playlist;

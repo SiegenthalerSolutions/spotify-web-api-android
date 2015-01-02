@@ -34,7 +34,7 @@ public class Followers {
      */
     static public List<Followers> getAll(JSONArray array) throws JSONException {
         final List<Followers> followers = new ArrayList<>(array.length());
-        for (int i = 0, j = followers.size(); i < j; i++) {
+        for (int i = 0, j = array.length(); i < j; i++) {
             followers.add(new Followers(array.getJSONObject(i)));
         }
         return followers;

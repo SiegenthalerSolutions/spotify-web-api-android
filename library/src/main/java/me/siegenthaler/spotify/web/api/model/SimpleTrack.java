@@ -49,7 +49,7 @@ public class SimpleTrack {
      */
     static public List<SimpleTrack> getAllSimple(JSONArray array) throws JSONException {
         final List<SimpleTrack> tracks = new ArrayList<>(array.length());
-        for (int i = 0, j = tracks.size(); i < j; i++) {
+        for (int i = 0, j = array.length(); i < j; i++) {
             tracks.add(new SimpleTrack(array.getJSONObject(i)));
         }
         return tracks;
@@ -62,7 +62,7 @@ public class SimpleTrack {
         this.mArtists = SimpleArtist.getAllSimple(data.getJSONArray("artists"));
         this.mAvailableMarkets = JsonParserUtil.getStringList(data.getJSONArray("available_markets"));
         this.mDiscNumber = data.getInt("disc_number");
-        this.mDuration = data.getLong("duration");
+        this.mDuration = data.getLong("duration_ms");
         this.mExplicit = data.getBoolean("explicit");
         this.mExternalUrls = JsonParserUtil.getStringMap(data.getJSONObject("external_urls"));
         this.mHref = data.getString("href");

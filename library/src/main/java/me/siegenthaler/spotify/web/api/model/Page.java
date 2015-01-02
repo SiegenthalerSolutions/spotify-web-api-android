@@ -18,7 +18,6 @@ package me.siegenthaler.spotify.web.api.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -57,7 +56,7 @@ public class Page<T> {
      * (non-doc)
      */
     final public List<T> getItems() {
-        return Collections.unmodifiableList(mItems);
+        return mItems;
     }
 
     /**

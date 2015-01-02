@@ -18,7 +18,6 @@ package me.siegenthaler.spotify.web.api.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +65,7 @@ public class SimpleBasePlaylist {
      * (non-doc)
      */
     final public Map<String, String> getExternalUrls() {
-        return Collections.unmodifiableMap(mExternalUrls);
+        return mExternalUrls;
     }
 
     /**
@@ -99,7 +98,7 @@ public class SimpleBasePlaylist {
      * (non-doc)
      */
     final public List<Image> getImages() {
-        return Collections.unmodifiableList(mImages);
+        return mImages;
     }
 
     /**

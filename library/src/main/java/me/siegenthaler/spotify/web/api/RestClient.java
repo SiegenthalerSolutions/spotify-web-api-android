@@ -15,8 +15,31 @@
  */
 package me.siegenthaler.spotify.web.api;
 
+import android.content.Context;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 /**
  * (non-doc)
  */
 public class RestClient {
+    private RequestQueue mRequestQueue;
+
+    /**
+     * (non-doc)
+     */
+    public void init(Context context) {
+        mRequestQueue = Volley.newRequestQueue(context);
+    }
+
+
+    public RequestQueue getRequestQueue() {
+        if (mRequestQueue != null) {
+            return mRequestQueue;
+        } else {
+            throw new IllegalStateException("RequestQueue not initialized");
+        }
+    }
+
 }

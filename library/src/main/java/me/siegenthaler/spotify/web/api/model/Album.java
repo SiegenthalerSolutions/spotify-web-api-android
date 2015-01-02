@@ -22,7 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +45,7 @@ public class Album extends SimpleAlbum {
      */
     static public List<Album> getAll(JSONArray array) throws JSONException {
         final List<Album> albums = new ArrayList<>(array.length());
-        for (int i = 0, j = albums.size(); i < j; i++) {
+        for (int i = 0, j = array.length(); i < j; i++) {
             albums.add(new Album(array.getJSONObject(i)));
         }
         return albums;
@@ -57,7 +56,7 @@ public class Album extends SimpleAlbum {
      */
     static private List<NameValuePair> getCopyrightsList(JSONArray array) throws JSONException {
         final List<NameValuePair> list = new ArrayList<>(array.length());
-        for (int i = 0, j = list.size(); i < j; i++) {
+        for (int i = 0, j = array.length(); i < j; i++) {
             final JSONObject object = array.getJSONObject(i);
             list.add(new BasicNameValuePair(object.getString("text"), object.getString("type")));
         }
@@ -93,7 +92,7 @@ public class Album extends SimpleAlbum {
      * (non-doc)
      */
     final public List<SimpleArtist> getArtists() {
-        return Collections.unmodifiableList(mArtists);
+        return mArtists;
     }
 
     /**
@@ -110,14 +109,14 @@ public class Album extends SimpleAlbum {
      * (non-doc)
      */
     final public List<NameValuePair> getCopyrights() {
-        return Collections.unmodifiableList(mCopyrights);
+        return mCopyrights;
     }
 
     /**
      * (non-doc)
      */
     final public Map<String, String> getExternalIds() {
-        return Collections.unmodifiableMap(mExternalIds);
+        return mExternalIds;
     }
 
     /**
@@ -134,7 +133,7 @@ public class Album extends SimpleAlbum {
      * (non-doc)
      */
     final public List<String> getGenres() {
-        return Collections.unmodifiableList(mGenres);
+        return mGenres;
     }
 
     /**

@@ -20,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +44,7 @@ public class SimpleAlbum {
      */
     static public List<SimpleAlbum> getAllSimple(JSONArray array) throws JSONException {
         final List<SimpleAlbum> albums = new ArrayList<>(array.length());
-        for (int i = 0, j = albums.size(); i < j; i++) {
+        for (int i = 0, j = array.length(); i < j; i++) {
             albums.add(new SimpleAlbum(array.getJSONObject(i)));
         }
         return albums;
@@ -84,14 +83,14 @@ public class SimpleAlbum {
      * (non-doc)
      */
     final public List<String> getAvailableMarkets() {
-        return Collections.unmodifiableList(mAvailableMarkets);
+        return mAvailableMarkets;
     }
 
     /**
      * (non-doc)
      */
     final public Map<String, String> getExternalUrls() {
-        return Collections.unmodifiableMap(mExternalUrls);
+        return mExternalUrls;
     }
 
     /**
@@ -122,7 +121,7 @@ public class SimpleAlbum {
      * (non-doc)
      */
     final public List<Image> getImages() {
-        return Collections.unmodifiableList(mImages);
+        return mImages;
     }
 
     /**

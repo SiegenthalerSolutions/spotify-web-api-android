@@ -20,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import me.siegenthaler.spotify.web.api.utilities.JsonParserUtil;
@@ -39,7 +38,7 @@ public class Artist extends SimpleArtist {
      */
     static public List<Artist> getAll(JSONArray array) throws JSONException {
         List<Artist> artists = new ArrayList<>(array.length());
-        for (int i = 0, j = artists.size(); i < j; i++) {
+        for (int i = 0, j = array.length(); i < j; i++) {
             artists.add(new Artist(array.getJSONObject(i)));
         }
         return artists;
@@ -78,7 +77,7 @@ public class Artist extends SimpleArtist {
      * (non-doc)
      */
     final public List<Image> getImages() {
-        return Collections.unmodifiableList(mImages);
+        return mImages;
     }
 
     /**
@@ -95,7 +94,7 @@ public class Artist extends SimpleArtist {
      * (non-doc)
      */
     final public List<String> getGenres() {
-        return Collections.unmodifiableList(mGenres);
+        return mGenres;
     }
 
     /**

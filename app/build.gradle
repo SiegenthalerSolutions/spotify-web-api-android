@@ -1,0 +1,41 @@
+///
+/// Apply executable plug-in to build the application
+///
+apply plugin: 'com.android.application'
+
+///
+/// Android information
+///
+android {
+    ///
+    /// Use API 21 for compiling and building
+    ///
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    ///
+    /// Application configuration targeting Android 14+
+    ///
+    defaultConfig {
+        applicationId "me.siegenthaler.spotify.web.api.example"
+        minSdkVersion 14
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+
+    ///
+    /// Use Java7
+    ///
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+///
+/// Dependencies
+///
+dependencies {
+    compile project(':library');
+}

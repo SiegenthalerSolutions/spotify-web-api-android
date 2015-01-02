@@ -35,7 +35,7 @@ public class Image {
      */
     static public List<Image> getAll(JSONArray array) throws JSONException {
         final List<Image> images = new ArrayList<>(array.length());
-        for (int i = 0, j = images.size(); i < j; i++) {
+        for (int i = 0, j = array.length(); i < j; i++) {
             images.add(new Image(array.getJSONObject(i)));
         }
         return images;

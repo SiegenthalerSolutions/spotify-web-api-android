@@ -20,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +41,7 @@ public class SimpleArtist {
      */
     static public List<SimpleArtist> getAllSimple(JSONArray array) throws JSONException {
         final List<SimpleArtist> artists = new ArrayList<>(array.length());
-        for (int i = 0, j = artists.size(); i < j; i++) {
+        for (int i = 0, j = array.length(); i < j; i++) {
             artists.add(new SimpleArtist(array.getJSONObject(i)));
         }
         return artists;
@@ -64,7 +63,7 @@ public class SimpleArtist {
      * (non-doc)
      */
     final public Map<String, String> getExternalUrls() {
-        return Collections.unmodifiableMap(mExternalUrls);
+        return mExternalUrls;
     }
 
     /**

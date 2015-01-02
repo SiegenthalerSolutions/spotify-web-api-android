@@ -15,12 +15,13 @@
  */
 package me.siegenthaler.spotify.web.api.model;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +40,7 @@ public class Track extends SimpleTrack {
      */
     static public List<Track> getAll(JSONArray array) throws JSONException {
         final List<Track> tracks = new ArrayList<>(array.length());
-        for (int i = 0, j = tracks.size(); i < j; i++) {
+        for (int i = 0, j = array.length(); i < j; i++) {
             tracks.add(new Track(array.getJSONObject(i)));
         }
         return tracks;
@@ -66,7 +67,7 @@ public class Track extends SimpleTrack {
      * (non-doc)
      */
     final public Map<String, String> getExternalIds() {
-        return Collections.unmodifiableMap(mExternalIds);
+        return mExternalIds;
     }
 
     /**
