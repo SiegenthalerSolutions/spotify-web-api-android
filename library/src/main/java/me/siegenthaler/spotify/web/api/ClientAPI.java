@@ -20,6 +20,7 @@ import android.content.Context;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+import me.siegenthaler.spotify.web.api.model.Token;
 import me.siegenthaler.spotify.web.api.request.AbstractRequest;
 import me.siegenthaler.spotify.web.api.request.AlbumListRequest;
 import me.siegenthaler.spotify.web.api.request.AlbumRequest;
@@ -49,13 +50,29 @@ import me.siegenthaler.spotify.web.api.request.UserRequest;
  * (non-doc)
  */
 public class ClientAPI {
+    /**
+     * Default port of Spotify API calls.
+     */
     private static final int DEFAULT_PORT = 443;
+
+    /**
+     * Default http scheme of Spotify API calls.
+     */
     private static final String DEFAULT_SCHEME = "https";
+
+    /**
+     * Default host of Spotify API calls.
+     */
     private static final String DEFAULT_HOST = "api.spotify.com";
+
+    /**
+     * Default host of Spotify authentication API calls.
+     */
     private static final String DEFAULT_AUTHENTICATION_HOST = "accounts.spotify.com";
 
     private final RequestQueue mRequestQueue;
     private final ClientMusicAPI mClientMusicAPI;
+    private Token mToken = null;
 
     /**
      * (non-doc)
@@ -75,6 +92,13 @@ public class ClientAPI {
     /**
      * (non-doc)
      */
+    public void setToken(Token token) {
+        mToken = token;
+    }
+
+    /**
+     * (non-doc)
+     */
     public AuthoriseClientFlowRequest authorise(String clientId, String clientSecret) {
         return addAuthenticationHeader(new AuthoriseClientFlowRequest())
                 .setAuthorisation(clientId, clientSecret)
@@ -84,7 +108,7 @@ public class ClientAPI {
     /**
      * (non-doc)
      */
-    public AuthoriseRefreshRequest refresh(String clientId, String clientSecret , String code, String redirectUri) {
+    public AuthoriseRefreshRequest refresh(String clientId, String clientSecret, String code, String redirectUri) {
         return addAuthenticationHeader(new AuthoriseRefreshRequest())
                 .setAuthorisation(clientId, clientSecret)
                 .setCode(code)
@@ -244,6 +268,7 @@ public class ClientAPI {
     public UserElseRequest getUser(String id) {
         return addDefaultHeader(new UserElseRequest().setUser(id));
     }
+
     /**
      * (non-doc)
      */
@@ -259,6 +284,9 @@ public class ClientAPI {
      * (non-doc)
      */
     protected <T extends AbstractRequest<T, ?>> T addDefaultHeader(T request) {
+        if (mToken != null && !mToken.hasExpired()) {
+            request.addHeader("Authorization", "Bearer " + mToken.getToken());
+        }
         return request
                 .setClient(mRequestQueue)
                 .setHost(DEFAULT_HOST)

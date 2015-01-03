@@ -36,3 +36,8 @@ android {
 dependencies {
     compile 'dev.dworks.libs:volleyplus:+'              // Service-Volley+
 }
+
+///
+/// Apply Gradle-Maven-Plug-in
+///
+apply from: "${rootDir}/gradle/scripts/gradle-mvn-push.gradle"
