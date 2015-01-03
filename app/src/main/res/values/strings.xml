@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">spotify-web-api-example</string>
+    <string name="app_hint">Search for a track</string>
 </resources>

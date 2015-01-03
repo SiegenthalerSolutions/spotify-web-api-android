@@ -34,5 +34,5 @@ android {
 /// Dependencies
 ///
 dependencies {
-    compile 'dev.dworks.libs:volleyplus:+'
+    compile 'dev.dworks.libs:volleyplus:+'              // Service-Volley+
 }

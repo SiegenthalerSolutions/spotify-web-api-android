@@ -68,6 +68,13 @@ public class ClientAPI {
     /**
      * (non-doc)
      */
+    public RequestQueue getRequestQueue() {
+        return mRequestQueue;
+    }
+
+    /**
+     * (non-doc)
+     */
     public AuthoriseClientFlowRequest authorise(String clientId, String clientSecret) {
         return addAuthenticationHeader(new AuthoriseClientFlowRequest())
                 .setAuthorisation(clientId, clientSecret)

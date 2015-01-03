@@ -15,26 +15,28 @@
  */
 package me.siegenthaler.spotify.web.api.example;
 
-import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.android.volley.Response;
-import com.android.volley.error.VolleyError;
 
 import java.util.List;
 
 import me.siegenthaler.spotify.web.api.ClientAPI;
-import me.siegenthaler.spotify.web.api.model.Album;
 import me.siegenthaler.spotify.web.api.model.Page;
-import me.siegenthaler.spotify.web.api.model.SimplePlaylist;
-import me.siegenthaler.spotify.web.api.model.Token;
 import me.siegenthaler.spotify.web.api.model.Track;
 
 /**
  *
  */
-public class ExampleActivity extends Activity {
+public class ExampleActivity extends ActionBarActivity {
     private ClientAPI mClient;
 
     /**
@@ -43,27 +45,48 @@ public class ExampleActivity extends Activity {
     @Override
     public void onCreate(Bundle instance) {
         super.onCreate(instance);
+        setContentView(R.layout.activity_main);
+
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mClient = new ClientAPI(getApplicationContext());
-        mClient.authorise("<client id>", "<client secret>")
-                .setListener(new Response.Listener<Token>() {
-                    @Override
-                    public void onResponse(Token o) {
-                        queryMore(o.getToken());
-                    }
-                }).send();
     }
 
-    private void queryMore(String token)
-    {
-        mClient.getAlbum("2dIGnmEIy1WZIcZCFSj6i8").setListener(new Response.Listener<Album>() {
-            @Override
-            public void onResponse(Album album) {
-                Log.d("Album", album.getName());
-            }
-        }).addHeader("Authorization", "Bearer " + token).send();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.home_menu, menu);
 
-        mClient.searchTrack("ihre persönliche glücksmelodie").setListener(new Response.Listener<Page<Track>>() {
+        final MenuItem item
+                = menu.findItem(R.id.search);
+        final SearchView view
+                = (SearchView) item.getActionView();
+        final SearchManager manager
+                = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                onTextChange(s);
+                return true;
+            }
+        });
+        view.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+        return true;
+    }
+
+    private void onTextChange(String query)
+    {
+        mClient.getRequestQueue().cancelAll("SEARCH");
+        mClient.searchTrack(query).setListener(new Response.Listener<Page<Track>>() {
             @Override
             public void onResponse(Page<Track> tracks) {
                 final List<Track> items = tracks.getItems();
@@ -71,21 +94,6 @@ public class ExampleActivity extends Activity {
                     Log.d("Track", item.getArtist(0).getName() + " - " + item.getName());
                 }
             }
-        }).addHeader("Authorization", "Bearer " + token).send();
-
-        mClient.getPlaylists("wolftein").setListener(new Response.Listener<Page<SimplePlaylist>>() {
-            @Override
-            public void onResponse(Page<SimplePlaylist> playlists) {
-                final List<SimplePlaylist> items = playlists.getItems();
-                for (SimplePlaylist item : items) {
-                    Log.d("Playlist", item.getName());
-                }
-            }
-        }).setErrorListener(new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.d("Playlist", volleyError.toString());
-            }
-        }).addHeader("Authorization", "Bearer " + token).send();
+        }).setTag("SEARCH").build();
     }
 }

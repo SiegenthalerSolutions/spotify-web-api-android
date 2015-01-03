@@ -15,13 +15,10 @@
  */
 package me.siegenthaler.spotify.web.api.request;
 
-import android.util.Log;
-
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.ParseError;
 import com.android.volley.toolbox.HttpHeaderParser;
 
@@ -46,10 +43,11 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
     protected int mMethod = Request.Method.GET;
     protected final Map<String, String> mParameters = new HashMap<>();
     protected final Map<String, String> mHeaders = new HashMap<>();
-    protected String mRawBody;
     protected Response.Listener mListener;
     protected Response.ErrorListener mErrorListener;
     protected RequestQueue mRequestQueue;
+    protected Object mTag;
+    protected Request.Priority mPriority;
 
     /**
      * (non-doc)
@@ -60,22 +58,16 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
      * (non-doc)
      */
     final public Request<T> build() {
-        return new BuiltJsonRequest<>(this, new ConstructCallback<T>() {
+        final Request<T> request = new BuiltJsonRequest<>(this, new ConstructCallback<T>() {
             @Override
             public T construct(String data) throws JSONException {
                 return getResponse(data);
             }
         });
-    }
-
-    /**
-     * (non-doc)
-     */
-    final public Request<T> send() {
-        final Request<T> request = build();
         mRequestQueue.add(request);
         return request;
     }
+
 
     /**
      * (non-doc)
@@ -162,14 +154,6 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
     /**
      * (non-doc)
      */
-    final public J setBody(String body) {
-        mRawBody = body;
-        return (J) this;
-    }
-
-    /**
-     * (non-doc)
-     */
     final public J addParameter(String name, String value) {
         mParameters.put(name, value);
         return (J) this;
@@ -180,6 +164,22 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
      */
     final public J addHeader(String name, String value) {
         mHeaders.put(name, value);
+        return (J) this;
+    }
+
+    /**
+     * (non-doc)
+     */
+    final public J setTag(Object tag) {
+        mTag = tag;
+        return (J) this;
+    }
+
+    /**
+     * (non-doc)
+     */
+    final public J setPriority(Request.Priority priority) {
+        mPriority = priority;
         return (J) this;
     }
 
@@ -211,13 +211,15 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
             this.mParameters = builder.mParameters;
             this.mHeaders = builder.mHeaders;
             this.mCallback = callback;
+            setPriority(builder.mPriority);
+            setTag(builder.mTag);
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public String getBodyContentType() {
+        final public String getBodyContentType() {
             return "application/x-www-form-urlencoded; charset=UTF-8";
         }
 
@@ -225,7 +227,7 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
          * {@inheritDoc}
          */
         @Override
-        protected Map<String, String> getParams() {
+        final protected Map<String, String> getParams() {
             return mParameters;
         }
 
@@ -233,7 +235,7 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
          * {@inheritDoc}
          */
         @Override
-        public Map<String, String> getHeaders() {
+        final public Map<String, String> getHeaders() {
             return mHeaders;
         }
 
@@ -241,7 +243,7 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
          * {@inheritDoc}
          */
         @Override
-        protected Response<T> parseNetworkResponse(NetworkResponse response) {
+        final protected Response<T> parseNetworkResponse(NetworkResponse response) {
             try {
                 final String jsonString =
                         new String(response.data, HttpHeaderParser.parseCharset(response.headers));
@@ -259,7 +261,7 @@ public abstract class AbstractRequest<J extends AbstractRequest, T> {
          * {@inheritDoc}
          */
         @Override
-        protected void deliverResponse(T response) {
+        final protected void deliverResponse(T response) {
             if (mListener != null) {
                 mListener.onResponse(response);
             }
