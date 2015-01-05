@@ -46,6 +46,7 @@ public final class AbstractRequest<T> extends Request<T> {
     private final Type mType;
     private final String mParent;
     private final Response.Listener<T> mListener;
+    private final boolean mJsonBody;
 
     /**
      * (non-doc)
@@ -57,6 +58,7 @@ public final class AbstractRequest<T> extends Request<T> {
         this.mHeaders = builder.mHeaders;
         this.mParent = builder.mParent;
         this.mListener = builder.mListener;
+        this.mJsonBody = builder.mJsonBody;
         setTag(builder.mIdentifier);
     }
 
@@ -65,7 +67,9 @@ public final class AbstractRequest<T> extends Request<T> {
      */
     @Override
     final public String getBodyContentType() {
-        return "application/x-www-form-urlencoded; charset=UTF-8";
+        return mJsonBody
+                ? "application/json; charset=UTF-8"
+                : "application/x-www-form-urlencoded; charset=UTF-8";
     }
 
     /**
@@ -130,6 +134,7 @@ public final class AbstractRequest<T> extends Request<T> {
         protected Response.Listener<T> mListener;
         protected String mIdentifier;
         protected RequestQueue mClient;
+        protected boolean mJsonBody;
 
         /**
          * (non-doc)
@@ -152,6 +157,14 @@ public final class AbstractRequest<T> extends Request<T> {
             this.mType = type;
             this.mMethod = method;
             this.mParent = parent;
+        }
+
+        /**
+         * (non-doc)
+         */
+        final protected J setJsonBody(boolean isJsonBody) {
+            mJsonBody = isJsonBody;
+            return (J) this;
         }
 
         /**

@@ -29,7 +29,11 @@ import me.siegenthaler.spotify.webapi.android.request.ArtistRequest;
 import me.siegenthaler.spotify.webapi.android.request.ArtistTopTrackRequest;
 import me.siegenthaler.spotify.webapi.android.request.AuthoriseClientFlowRequest;
 import me.siegenthaler.spotify.webapi.android.request.AuthoriseRefreshRequest;
+import me.siegenthaler.spotify.webapi.android.request.PlaylistAddTracksRequest;
+import me.siegenthaler.spotify.webapi.android.request.PlaylistChangeDetailsRequest;
+import me.siegenthaler.spotify.webapi.android.request.PlaylistCreateRequest;
 import me.siegenthaler.spotify.webapi.android.request.PlaylistListRequest;
+import me.siegenthaler.spotify.webapi.android.request.PlaylistReplaceTracksRequest;
 import me.siegenthaler.spotify.webapi.android.request.PlaylistRequest;
 import me.siegenthaler.spotify.webapi.android.request.PlaylistTrackRequest;
 import me.siegenthaler.spotify.webapi.android.request.SearchAlbumRequest;
@@ -235,6 +239,34 @@ public class ClientRestAPI {
      */
     public FollowCheckRequest isFollowing(String type, String... ids) {
         return addDefaultHeader(new FollowCheckRequest().setType(type).setIds(ids));
+    }
+
+    /**
+     * (non-doc)
+     */
+    public PlaylistAddTracksRequest addTrackToPlaylist(String user, String playlist) {
+        return addDefaultHeader(new PlaylistAddTracksRequest().setPlaylist(user, playlist));
+    }
+
+    /**
+     * (non-doc)
+     */
+    public PlaylistChangeDetailsRequest changePlaylistDetail(String user, String playlist) {
+        return addDefaultHeader(new PlaylistChangeDetailsRequest().setPlaylist(user, playlist));
+    }
+
+    /**
+     * (non-doc)
+     */
+    public PlaylistCreateRequest createPlaylist(String user, String playlist) {
+        return addDefaultHeader(new PlaylistCreateRequest().setUser(user).serName(playlist));
+    }
+
+    /**
+     * (non-doc)
+     */
+    public PlaylistReplaceTracksRequest replacePlaylistTracks(String user, String playlist) {
+        return addDefaultHeader(new PlaylistReplaceTracksRequest().setPlaylist(user, playlist));
     }
 
     /**
