@@ -40,6 +40,9 @@ import me.siegenthaler.spotify.webapi.android.request.TrackListRequest;
 import me.siegenthaler.spotify.webapi.android.request.TrackRequest;
 import me.siegenthaler.spotify.webapi.android.request.browse.BrowseAlbumRequest;
 import me.siegenthaler.spotify.webapi.android.request.browse.BrowsePlaylistRequest;
+import me.siegenthaler.spotify.webapi.android.request.follow.FollowAddRequest;
+import me.siegenthaler.spotify.webapi.android.request.follow.FollowCheckRequest;
+import me.siegenthaler.spotify.webapi.android.request.follow.FollowRemoveRequest;
 import me.siegenthaler.spotify.webapi.android.request.music.MusicAddRequest;
 import me.siegenthaler.spotify.webapi.android.request.music.MusicRemoveRequest;
 import me.siegenthaler.spotify.webapi.android.request.music.MusicTrackCheckRequest;
@@ -211,6 +214,27 @@ public class ClientRestAPI {
      */
     public MusicTrackRequest getMusicTracks() {
         return addDefaultHeader(new MusicTrackRequest());
+    }
+
+    /**
+     * (non-doc)
+     */
+    public FollowAddRequest addFollower(String type, String... ids) {
+        return addDefaultHeader(new FollowAddRequest().setType(type).setIds(ids));
+    }
+
+    /**
+     * (non-doc)
+     */
+    public FollowRemoveRequest removeFollower(String type, String... ids) {
+        return addDefaultHeader(new FollowRemoveRequest().setType(type).setIds(ids));
+    }
+
+    /**
+     * (non-doc)
+     */
+    public FollowCheckRequest isFollowing(String type, String... ids) {
+        return addDefaultHeader(new FollowCheckRequest().setType(type).setIds(ids));
     }
 
     /**
