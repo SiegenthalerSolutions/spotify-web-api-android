@@ -34,7 +34,8 @@ android {
 /// Dependencies
 ///
 dependencies {
-    compile 'dev.dworks.libs:volleyplus:+'              // Service-Volley+
+    compile 'com.google.code.gson:gson:2.3.1'        // Service-JSON
+    compile 'dev.dworks.libs:volleyplus:+'           // Service-Threading
 }
 
 ///

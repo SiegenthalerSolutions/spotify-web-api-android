@@ -5,5 +5,5 @@
   ~ * file 'LICENSE', which is part of this source code package.  * ~
   ~ *************************************************************** ~
   -->
-<manifest package="me.siegenthaler.spotify.web.api">
+<manifest package="me.siegenthaler.spotify.webapi.android">
 </manifest>

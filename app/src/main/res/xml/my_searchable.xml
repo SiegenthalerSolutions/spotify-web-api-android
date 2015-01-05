@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ *************************************************************** ~
+  ~ * This file is subject to the terms and conditions defined in * ~
+  ~ * file 'LICENSE', which is part of this source code package.  * ~
+  ~ *************************************************************** ~
+  -->
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
             android:label="@string/app_name"
             android:hint="@string/app_hint"/>

@@ -17,7 +17,7 @@ android {
     /// Application configuration targeting Android 14+
     ///
     defaultConfig {
-        applicationId "me.siegenthaler.spotify.web.api.example"
+        applicationId "me.siegenthaler.spotify.webapi.android.example"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
